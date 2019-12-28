@@ -1,4 +1,6 @@
 import sys 
+import backend
+import database
 
 def greeting():
     print("This program allows you to keep track of how the price of a specific item may change by day.")
@@ -10,7 +12,7 @@ def greeting():
 
 def decision():
     option = ""
-    validOptions = ["A", "D", "V", "EXIT"]
+    validOptions = ["A", "D", "V", "R", "P", "EXIT"]
 
     while (option not in validOptions):
         option = input("What would you like? ").upper()
@@ -19,22 +21,31 @@ def decision():
 
 def path(option):
     if option == "A":
-        addItem()
+        url = input("Enter the URL: ")
+        database.insertItem(url)
     elif option == "D":
-        print("We'll call another function to delete the item to the watch list")
+        database.printItems()
+        url = input("Enter the URL: ")
+        database.deleteItem(url)
     elif option == "V":
-        print("We'll call another function to view our watch list")
+        database.printItems()
+    elif option == "R":
+        backend.getDailyPrice()
+    elif option == "P":
+        database.printPrices()
     else:
-        print("GOODBYE!")
+        sys.exit()
 
 def addItem():
-    url = input("What is the url? ")
-    
+    url = str(input("What is the url? "))
+
 
 def main():
+    backend.triggerDaily()
     greeting()
-    option = decision()
-    path(option)
+    while True: 
+        option = decision()
+        path(option)
 
 if __name__ == "__main__":
     main() 
